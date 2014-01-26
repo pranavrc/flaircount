@@ -46,7 +46,7 @@ class FlairCount:
         width = 0.8
         rects = ax.bar(range(len(labels)), values, width = width)
 
-        ax.set_title('/r/Cricket flair distribution')
+        ax.set_title('/r/' + self.subreddit + ' flair distribution')
         ax.set_ylabel('Subscriber count')
         ax.set_xticks(np.arange(len(labels)) + width / 2)
         ax.set_xticklabels(labels, rotation = 90, size='x-small')
