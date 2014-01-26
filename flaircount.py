@@ -4,12 +4,14 @@ import requests
 import json
 import pylab as pl
 import numpy as np
+import sys
 
 class FlairCount:
     ''' Class wrapper for fetching data and generating stats. '''
     def __init__(self, subreddit):
         self.subreddit = subreddit
         self.api = 'http://reddit.com/r/' + self.subreddit + '/api/flairlist.json?limit=1000&after='
+        self.saved_image = None
 
     def build_data(self):
         ''' Fetch data from api and populate dict with subscriber count for each flair. '''
@@ -54,9 +56,15 @@ class FlairCount:
             height = rect.get_height()
             pl.text(rect.get_x() + rect.get_width() / 2., 1.02 * height, '%s' % (values[ii]), ha = 'center', va = 'bottom', fontsize = 'xx-small')
 
-        pl.savefig(self.subreddit + '_subreddit_flair_distribution.jpg')
+        self.saved_image = self.subreddit + '_subreddit_flair_distribution.jpg'
+        pl.savefig(self.saved_image)
 
 if __name__ == "__main__":
-    a = FlairCount('cricket')
-    c = a.build_data()
-    a.build_chart(c)
+    if len(sys.argv) < 2:
+        print 'Usage: python flaircount.py <subreddit>'
+    else:
+        a = FlairCount(sys.argv[1])
+        data = a.build_data()
+        a.build_chart(data)
+        print data
+        print 'Saved to: ' + a.saved_image
