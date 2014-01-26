@@ -6,11 +6,13 @@ import pylab as pl
 import numpy as np
 
 class FlairCount:
+    ''' Class wrapper for fetching data and generating stats. '''
     def __init__(self, subreddit):
         self.subreddit = subreddit
         self.api = 'http://reddit.com/r/' + self.subreddit + '/api/flairlist.json?limit=1000&after='
 
     def build_data(self):
+        ''' Fetch data from api and populate dict with subscriber count for each flair. '''
         after = ''
         flairs = {}
 
@@ -33,12 +35,13 @@ class FlairCount:
         return flairs
 
     def build_chart(self, data):
+        ''' Plot a bar chart with the acquired data. '''
         values = data.values()
         labels = data.keys()
 
         fig = pl.figure(figsize = (12, 10))
         ax = pl.subplot(111)
-        width = 0.8 
+        width = 0.8
         rects = ax.bar(range(len(labels)), values, width = width)
 
         ax.set_title('/r/Cricket flair distribution')
@@ -46,6 +49,7 @@ class FlairCount:
         ax.set_xticks(np.arange(len(labels)) + width / 2)
         ax.set_xticklabels(labels, rotation = 90, size='x-small')
 
+        # For displaying the corresponding value above each bar.
         for ii, rect in enumerate(rects):
             height = rect.get_height()
             pl.text(rect.get_x() + rect.get_width() / 2., 1.02 * height, '%s' % (values[ii]), ha = 'center', va = 'bottom', fontsize = 'xx-small')
